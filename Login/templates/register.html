@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="page">
+    <!-- Brand / Logo -->
+    <div class="brand">
+        <div class="logo-mark">
+            <!-- Aqui você pode colocar um <img> ou SVG do logo -->
+            {% load static %}
+            <img src="{% static 'img/favicon.png' %}" alt="SaveSpark logo" width="200" height="200">
+        </div>
+    </div>
+
+    <!-- Glass Card Register -->
+    <div class="login-card">
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <!-- Email Field -->
+            <div class="field">
+                <label for="{{ form.email.id_for_label }}" class="field-label">
+                    {{ form.email.label }}
+                </label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.email.errors|striptags }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Username Field -->
+            <div class="field">
+                <label for="{{ form.username.id_for_label }}" class="field-label">
+                    {{ form.username.label }}
+                </label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.username.errors|striptags }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password Field -->
+            <div class="field">
+                <label for="{{ form.password1.id_for_label }}" class="field-label">
+                    {{ form.password1.label }}
+                </label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.password1.errors|striptags }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="field">
+                <label for="{{ form.password2.id_for_label }}" class="field-label">
+                    {{ form.password2.label }}
+                </label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.password2.errors|striptags }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn submit">Registrar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
