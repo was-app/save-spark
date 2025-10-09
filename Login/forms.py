@@ -38,3 +38,10 @@ class RegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['email', 'username', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
