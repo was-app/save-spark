@@ -40,7 +40,7 @@ def register(request):
             user = form.save()
             user.save()
             client = Client(client=user)
-            return redirect('Login')
+            return redirect('login')
         else:
             messages.error(request, form.errors)
     else:

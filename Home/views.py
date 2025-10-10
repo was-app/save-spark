@@ -5,7 +5,7 @@ from django.contrib import messages
 
 def dashboard(request):
     if not request.user.is_authenticated:
-        return redirect('Login')
+        return redirect('login')
     return render(request, 'home/dashboard.html')
 
 def index(request):

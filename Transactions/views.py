@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 
 def add_income(request):
     if not request.user.is_authenticated:
-        return redirect('Login') 
+        return redirect('login') 
     
     if request.method == 'POST':
         form = IncomeTransactionForm(request.POST)
@@ -22,7 +22,7 @@ def add_income(request):
 
 def add_outgoing(request):
     if not request.user.is_authenticated:
-        return redirect('Login')
+        return redirect('login')
 
     if request.method == 'POST':
         form = OutgoingTransactionForm(request.POST)

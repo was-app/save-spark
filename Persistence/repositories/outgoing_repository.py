@@ -1,5 +1,6 @@
 from . import *
-from utils.utils import detect_date_type
+from Persistence.repositories.utils.utils import detect_date_type
+
 
 class OutgoingTranscationRepository(BaseRepository):
     def __init__(self):

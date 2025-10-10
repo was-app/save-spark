@@ -1,5 +1,5 @@
 from . import *
-from utils.utils import detect_date_type
+from Persistence.repositories.utils.utils import detect_date_type
 
 class IncomeTranscationRepository(BaseRepository):
     def __init__(self):
