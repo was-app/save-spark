@@ -28,7 +28,7 @@ class IncomeTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.CharField()
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
@@ -43,7 +43,7 @@ class OutgoingTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.CharField()
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
