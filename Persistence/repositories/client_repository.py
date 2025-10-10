@@ -12,3 +12,6 @@ class ClientRepository(BaseRepository):
         instance.current_balance += amount
         instance.save()
         return instance
+    
+    def get_user_by_id(self, id):
+        return self.model.objects.get(pk=id)

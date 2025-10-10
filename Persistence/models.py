@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Client(models.Model):
+    id = models.AutoField(primary_key=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     current_balance = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -27,7 +28,7 @@ class IncomeTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    categorie = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
@@ -42,7 +43,7 @@ class OutgoingTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    categorie = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
