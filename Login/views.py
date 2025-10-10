@@ -8,11 +8,11 @@ from .models import Client
 from .forms import *
 
 def redirect_login(request):
-    return redirect('Login')
+    return redirect('login')
 
 def user_logout(request):
     logout(request)
-    return redirect('Login')
+    return redirect('login')
 
 def user_login(request):
     if request.method == 'POST':
@@ -25,10 +25,6 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                
-                 # VAMOS ADICIONAR ESTA LINHA PARA TESTE:
-                print("--- TENTANDO REDIRECIONAR AGORA ---")
-                
                 return redirect('home:dashboard')
 
     else:
