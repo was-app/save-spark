@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Client(models.Model):
     id = models.AutoField(primary_key=True)
-    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    client = models.ForeignKey(User, on_delete=models.CASCADE, related_name='persistence_client')
     current_balance = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
