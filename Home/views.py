@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
-def home(request):
+def dashboard(request):
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect('Login')
+    return render(request, 'home/dashboard.html')
 
-    if request.method == 'POST':
-        if 'recurrent_button' in request.POST:
-            return redirect('recurrent_transaction')
-        elif 'extra_button' in request.POST:
-            return redirect('extra_transaction')
-
-    return render(request, 'home/home.html')
+def index(request):
+    return redirect('home:dashboard') 

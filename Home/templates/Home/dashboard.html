@@ -1,0 +1,28 @@
+{% comment %} home/templates/home/dashboard.html {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold mb-8">Bem-vindo, {{ user.username }}!</h1>
+        <p class="text-xl mb-10">O que você deseja fazer?</p>
+        <div class="space-x-4">
+            <a href="{% url 'add_income' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg text-xl">
+                Adicionar Renda
+            </a>
+            <a href="{% url 'add_outgoing' %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg text-xl">
+                Adicionar Gasto
+            </a>
+        </div>
+        <div class="mt-12">
+            <a href="{% url 'logout' %}" class="text-gray-500 hover:text-gray-700">Sair</a>
+        </div>
+    </div>
+</body>
+</html>

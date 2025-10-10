@@ -1,21 +1,45 @@
+# Transactions/forms.py
+
 from django import forms
+from Persistence.models import IncomeTransaction, OutgoingTransaction, Category
 
-TRANSACTION_TYPE = [
-    ('expense', 'Gasto'),
-    ('income', 'Renda')
-]
+class IncomeTransactionForm(forms.ModelForm):
+    # Puxa as categorias do banco de dados para o usuário poder escolher
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        label="Categoria",
+        widget=forms.Select(attrs={'class': 'w-full p-2 border rounded'})
+    )
 
-CATEGORY_CHOICES = [
-    ('business', 'Business'),
-    ('vanity', 'Vanity'),
-    ('extra', 'Extra'),
-    ('luxury', 'Luxury'),
-    ('job', 'Job'),
-    ('food', 'Food'),
-]
+    class Meta:
+        model = IncomeTransaction
+        fields = ['value', 'category']
+        widgets = {
+            'value': forms.NumberInput(attrs={'class': 'w-full p-2 border rounded', 
+                                              'placeholder': 'Valor da Renda',
+            }),
+        }
+        labels = {
+            'value': 'Valor',
+        }
 
-class TransactionForm(forms.Form):
-    transaction_type = forms.ChoiceField(choices=TRANSACTION_TYPE, label="Tipo", required=True)
-    name = forms.CharField(max_length=100, label="Nome", required=True)
-    amount = forms.DecimalField(max_digits=10, decimal_places=2, label="Valor", required=True)
-    category = forms.ChoiceField(choices=CATEGORY_CHOICES, label="Categoria", required=True)
+
+class OutgoingTransactionForm(forms.ModelForm):
+    # Puxa as categorias do banco de dados para o usuário poder escolher
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        label="Categoria",
+        widget=forms.Select(attrs={'class': 'w-full p-2 border rounded'})
+    )
+
+    class Meta:
+        model = OutgoingTransaction
+        fields = ['value', 'category']
+        widgets = {
+            'value': forms.NumberInput(attrs={'class': 'w-full p-2 border rounded',
+                                              'placeholder': 'Valor do Gasto',
+            }),
+        }
+        labels = {
+            'value': 'Valor',
+        }

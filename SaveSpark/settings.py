@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Login', 'Persistence',
-    'widget_tweaks'
+    'widget_tweaks',
+    'Login.apps.LoginConfig',
+    'Persistence.apps.PersistenceConfig',
+    'Home.apps.HomeConfig',
+    'Transactions.apps.TransactionsConfig',
 ]
 
 MIDDLEWARE = [

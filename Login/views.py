@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from Persistence.services.client_service import ClientService
+from .models import Client
 
 # Create your views here.
 from .forms import *
@@ -21,25 +21,26 @@ def user_login(request):
 
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            
+
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('home:dashboard')
 
     else:
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
+    
 
 def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            service = ClientService()
-            service.create_client(user)
-            return redirect('login')
+            user.save()
+            client = Client(client=user)
+            return redirect('Login')
         else:
             messages.error(request, form.errors)
     else:
