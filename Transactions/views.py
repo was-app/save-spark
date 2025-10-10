@@ -35,8 +35,9 @@ def add_outgoing(request):
         form = OutgoingTransactionForm(request.POST)
         if form.is_valid():
             # outgoing = form.save(commit=False)
-            outgoing.client = request.user
-            TransactionService.register_outgoing(client=request.user, value=outgoing.value, category=outgoing.category)
+            outgoing = form.cleaned_data
+            tmp = TransactionService()
+            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'])
             return redirect('home:dashboard')
     else:
         form = OutgoingTransactionForm()

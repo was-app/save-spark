@@ -65,8 +65,7 @@ class OutgoingTransactionForm(forms.ModelForm):
         })
     )
 
-    category = forms.ModelChoiceField(
-        queryset=Category.objects.all(),
+    category = forms.CharField(
         label="Categoria",
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
