@@ -8,11 +8,11 @@ from Persistence.services.client_service import ClientService
 from .forms import *
 
 def redirect_login(request):
-    return redirect('Login')
+    return redirect('login')
 
 def user_logout(request):
     logout(request)
-    return redirect('Login')
+    return redirect('login')
 
 def user_login(request):
     if request.method == 'POST':
@@ -25,18 +25,12 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('dashboard')
+                return redirect('home')
 
     else:
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
-    
-
-def dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('Login')
-    return render(request, 'dashboard.html')
 
 def register(request):
     if request.method == 'POST':
@@ -45,7 +39,7 @@ def register(request):
             user = form.save()
             service = ClientService()
             service.create_client(user)
-            return redirect('Login')
+            return redirect('login')
         else:
             messages.error(request, form.errors)
     else:

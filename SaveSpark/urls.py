@@ -17,8 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from Login import views as login_views
 
+from django.contrib import admin
+from django.urls import path, include
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', include('Login.urls')),
-    path('', login_views.redirect_login),
+
+    path('', include('Login.urls')),
+    path('home/', include('Home.urls')),
+    path('transaction/', include('Transactions.urls')),
 ]
