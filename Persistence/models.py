@@ -26,7 +26,7 @@ class Category(models.Model):
 class IncomeTransaction(models.Model):
     id = models.AutoField(primary_key=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
-    value = models.BigIntegerField()
+    value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField()
 
@@ -41,7 +41,7 @@ class OutgoingTransaction(models.Model):
 
     id = models.AutoField(primary_key=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
-    value = models.BigIntegerField()
+    value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField()
 
