@@ -29,6 +29,7 @@ class IncomeTransaction(models.Model):
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField()
+    description = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
@@ -44,6 +45,7 @@ class OutgoingTransaction(models.Model):
     value = models.BigIntegerField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField()
+    description = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
