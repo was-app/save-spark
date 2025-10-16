@@ -43,3 +43,6 @@ def add_outgoing(request):
         form = OutgoingTransactionForm()
 
     return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'Gasto'})
+
+def view_all(request):
+    pass
