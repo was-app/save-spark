@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG = bool(os.environ.get("DEBUG", default=True))
+DEBUG = bool(os.environ.get("DEBUG", default=True))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
 
@@ -84,9 +84,7 @@ WSGI_APPLICATION = 'SaveSpark.wsgi.application'
 
 DATABASES = {
      'default': {
-         'ENGINE': 'django.db.backends.{}'.format(
-             os.getenv('DATABASE_ENGINE')
-         ),
+         'ENGINE': 'django.db.backends.postgresql',
          'NAME': os.getenv('DATABASE_NAME'),
          'USER': os.getenv('DATABASE_USERNAME'),
          'PASSWORD': os.getenv('DATABASE_PASSWORD'),
@@ -139,3 +137,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # PERSONAL SETTINGS
 SESSION_COOKIE_AGE = 172800  # 2 days in seconds
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}

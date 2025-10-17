@@ -4,6 +4,8 @@ FROM python:3.10.12
 # Set working directory inside the container
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 # Copy project files into container
 COPY . /app
 

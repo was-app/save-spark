@@ -3,9 +3,9 @@
 from .forms import IncomeTransactionForm, OutgoingTransactionForm
 from .models import FinancialTransactionProcessor
 from Persistence.services.transaction_service import TransactionService
+from Persistence.models import Category
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-
 
 def add_income(request):
     if not request.user.is_authenticated:
@@ -43,3 +43,53 @@ def add_outgoing(request):
         form = OutgoingTransactionForm()
 
     return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'Gasto'})
+
+def view_all(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    user = request.user
+    service = TransactionService()
+
+    if request.method == 'POST':
+        transaction_type = request.POST.get('transaction_type')
+        transaction_id = request.POST.get('transaction_id')
+        new_category_name = request.POST.get('category')
+
+        if transaction_type == 'income':
+            transaction = service.get_income_by_id(transaction_id)
+        else:
+            transaction = service.get_outgoing_by_id(transaction_id)
+
+        if transaction and new_category_name:
+            transaction.category = new_category_name
+            if transaction_type == 'income':
+                service.update_income(transaction=transaction)
+            else:
+                service.update_outgoing(transaction=transaction)
+
+        return redirect('view_all')
+
+    income_transactions = service.get_incomes_from_user(user)
+    outgoing_transactions = service.get_outgoings_from_user(user)
+    
+
+    grouped = {}
+    for t in income_transactions:
+        cat_name = t.category if t.category else "Sem Categoria"
+        t.type = "income"
+        grouped.setdefault(cat_name, []).append(t)
+
+    for t in outgoing_transactions:
+        cat_name = t.category if t.category else "Sem Categoria"
+        t.type = "outgoing"
+        grouped.setdefault(cat_name, []).append(t)
+
+    categories = [cat.name for cat in Category.objects.all()]
+
+    context = {
+        'grouped_transactions': grouped,
+        'categories': categories,
+    }
+
+    return render(request, 'transactions/view_all.html', context)
