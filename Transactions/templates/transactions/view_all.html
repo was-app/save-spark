@@ -9,80 +9,65 @@
 
 <h1 class="text-3xl font-bold mb-6">Minhas Transações</h1>
 
-{% for category, transactions in grouped_transactions.items %}
-<div class="mb-8 bg-white p-4 rounded shadow">
-    <h2 class="text-2xl font-semibold mb-4">{{ category }}</h2>
+{% for category_name, transactions in grouped_transactions.items %}
+<div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">{{ category_name }}</h2>
 
-    <table class="min-w-full bg-gray-50 border">
-        <thead class="bg-gray-200">
+    <table class="min-w-full">
+        <thead class="bg-gray-50">
             <tr>
-                <th class="px-4 py-2 text-left">Descrição</th>
-                <th class="px-4 py-2 text-left">Tipo</th>
-                <th class="px-4 py-2 text-left">Valor</th>
-                <th class="px-4 py-2 text-left">Categoria</th>
-                <th class="px-4 py-2 text-left">Ações</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mudar Categoria</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-white divide-y divide-gray-200">
             {% for t in transactions %}
-            <tr class="border-b hover:bg-gray-100">
-                <!-- Descrição -->
-                <td class="px-4 py-2">
-                    {% if t.description %}
-                        {{ t.description }}
-                    {% else %}
-                        Sem descrição
-                    {% endif %}
-                </td>
-
-                <!-- Tipo -->
-                <td class="px-4 py-2">
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">{{ t.description|default:"Sem descrição" }}</td>
+                
+                <td class="px-6 py-4 whitespace-nowrap">
                     {% if t.type == 'income' %}
-                        <span class="text-green-600 font-semibold">Renda</span>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Renda</span>
                     {% else %}
-                        <span class="text-red-600 font-semibold">Gasto</span>
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Gasto</span>
                     {% endif %}
                 </td>
-
-                <!-- Valor -->
-                <td class="px-4 py-2">
-                    {% if t.type == 'income' %}
-                        <span class="text-green-600">R$ {{ t.value }}</span>
-                    {% else %}
-                        <span class="text-red-600">R$ {{ t.value }}</span>
-                    {% endif %}
+                
+                <td class="px-6 py-4 whitespace-nowrap {% if t.type == 'income' %}text-green-600{% else %}text-red-600{% endif %}">
+                    R$ {{ t.value }}
                 </td>
 
-                <!-- Categoria -->
-                <td class="px-4 py-2">
+                <td class="px-6 py-4 whitespace-nowrap">
                     <form method="POST" class="flex items-center space-x-2">
                         {% csrf_token %}
-                        <input type="hidden" name="transaction_type" value="{{ t.type }}">
                         <input type="hidden" name="transaction_id" value="{{ t.id }}">
-                        <select name="category" class="border rounded px-2 py-1">
-                            {% for cat_name in categories %}
-                                <option value="{{ cat_name }}" {% if t.category == cat_name %}selected{% endif %}>
-                                    {{ cat_name }}
+                        <input type="hidden" name="transaction_type" value="{{ t.type }}">
+                        
+                        <select name="category" class="border rounded-md px-2 py-1">
+                            {% for category_option in all_categories %}
+                                <option value="{{ category_option.id }}" {% if t.category.id == category_option.id %}selected{% endif %}>
+                                    {{ category_option.name }}
                                 </option>
                             {% endfor %}
                         </select>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded">
+                        
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                             Atualizar
                         </button>
                     </form>
                 </td>
-
-                <td class="px-4 py-2"></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 {% empty %}
-<p>Nenhuma transação encontrada.</p>
+<p class="text-gray-500">Nenhuma transação encontrada.</p>
 {% endfor %}
 
-<a href="{% url 'home:dashboard' %}" class="text-gray-500 hover:text-gray-700">Voltar</a>
+<a href="{% url 'Home:dashboard' %}" class="mt-6 inline-block text-blue-500 hover:underline">Voltar para a Dashboard</a>
 
 </body>
 </html>
