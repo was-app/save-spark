@@ -15,8 +15,8 @@ class TransactionService:
     def update_income(self, instance, **kwargs):
         self.income_repo.update(instance, **kwargs)
 
-    def delete_income(self, **kwargs):
-        self.income_repo.delete(**kwargs)
+    def delete_income(self, instance):
+        self.income_repo.delete(instance)
 
     def register_outgoing(self, **kwargs):
         self.outgoing_repo.create(**kwargs)
@@ -24,8 +24,8 @@ class TransactionService:
     def update_outgoing(self, instance, **kwargs):
         self.outgoing_repo.update(instance, **kwargs)
 
-    def delete_outgoing(self, **kwargs):
-        self.outgoing_repo.delete(**kwargs)
+    def delete_outgoing(self, instance):
+        self.outgoing_repo.delete(instance)
     
     def get_income_by_id(self, id):
         return self.income_repo.get_income_by_id(id=id)
