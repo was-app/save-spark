@@ -6,9 +6,11 @@ FREQUENCY_CHOICES = [
     ('Semanal', ' Semanal'),
     ('Mensal', ' Mensal'),
     ('Anual', ' Anual'),
+    ('Único', ' Único')
 ]
 
 class IncomeTransactionForm(forms.ModelForm):
+
     description = forms.CharField(
         label="Descrição",
         max_length=100,
@@ -26,7 +28,8 @@ class IncomeTransactionForm(forms.ModelForm):
         })
     )
 
-    category = forms.CharField(
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.filter(type='Renda').order_by('name'),
         label="Categoria",
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
@@ -44,6 +47,14 @@ class IncomeTransactionForm(forms.ModelForm):
     class Meta:
         model = IncomeTransaction
         fields = ['description', 'value', 'category', 'frequency']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate choices dynamically at runtime
+        self.fields['category'].choices = [
+            (str(category.id), category.name)
+            for category in Category.objects.filter(type='Renda').order_by('name')
+        ]
 
 
 #   === FORMULÁRIO DE GASTOS ===
@@ -65,7 +76,8 @@ class OutgoingTransactionForm(forms.ModelForm):
         })
     )
 
-    category = forms.CharField(
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.filter(type='Gasto').order_by('name'),
         label="Categoria",
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
@@ -75,3 +87,11 @@ class OutgoingTransactionForm(forms.ModelForm):
     class Meta:
         model = OutgoingTransaction
         fields = ['description', 'value', 'category']
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     # Populate choices dynamically at runtime
+    #     self.fields['category'].choices = [
+    #         (str(category.id), category.name)
+    #         for category in Category.objects.filter(type='Gasto').order_by('name')
+    #     ]

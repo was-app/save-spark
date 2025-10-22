@@ -2,6 +2,14 @@ from django.db import models
 from django.db import transaction
 from django.contrib.auth.models import User
 
+FREQUENCY_CHOICES = [
+    ('Diário', 'Diário'),
+    ('Semanal', 'Semanal'),
+    ('Mensal', 'Mensal'),
+    ('Anual', 'Anual'),
+    ('Único', 'Único'),
+]
+
 # Create your models here.
 class Client(models.Model):
     id = models.AutoField(primary_key=True)
@@ -17,7 +25,11 @@ class Client(models.Model):
     
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=30)
+    type = models.CharField(max_length=10, choices=[('income', 'Income'), ('outgoing', 'Outgoing')], null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'categories'
@@ -28,8 +40,9 @@ class IncomeTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.CharField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"
@@ -39,13 +52,13 @@ class IncomeTransaction(models.Model):
         ordering = ['-carried_out_at']
 
 class OutgoingTransaction(models.Model):
-
     id = models.AutoField(primary_key=True)
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.CharField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=255, blank=True, null=True)
+    frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return f"{self.client.username} - {self.value}"

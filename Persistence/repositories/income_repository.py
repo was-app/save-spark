@@ -26,3 +26,6 @@ class IncomeTranscationRepository(BaseRepository):
             filters["carried_out_at__date"] = date(y, m, d)
 
         return self.model.objects.filter(**filters)
+
+    def get_incomes_by_category(self, category):
+        return self.model.objects.filter(category=category)
