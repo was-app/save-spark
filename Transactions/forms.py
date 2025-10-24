@@ -29,7 +29,7 @@ class IncomeTransactionForm(forms.ModelForm):
     )
 
     category = forms.ModelChoiceField(
-        queryset=Category.objects.filter(type='Renda').order_by('name'),
+        queryset=Category.objects.filter(type='income').order_by('name'),
         label="Categoria",
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
@@ -53,7 +53,7 @@ class IncomeTransactionForm(forms.ModelForm):
         # Populate choices dynamically at runtime
         self.fields['category'].choices = [
             (str(category.id), category.name)
-            for category in Category.objects.filter(type='Renda').order_by('name')
+            for category in Category.objects.filter(type='income').order_by('name')
         ]
 
 
@@ -77,7 +77,7 @@ class OutgoingTransactionForm(forms.ModelForm):
     )
 
     category = forms.ModelChoiceField(
-        queryset=Category.objects.filter(type='Gasto').order_by('name'),
+        queryset=Category.objects.filter(type='outgoing').order_by('name'),
         label="Categoria",
         widget=forms.Select(attrs={
             'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'

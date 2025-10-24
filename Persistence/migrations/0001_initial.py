@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('client', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'db_table': 'outcome_transactions',
+                'db_table': 'outgoing_transactions',
                 'ordering': ['-carried_out_at'],
             },
         ),

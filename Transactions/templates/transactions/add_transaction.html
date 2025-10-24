@@ -21,7 +21,7 @@
                 <label for="id_description" class="block text-gray-700 font-semibold mb-1">Descrição</label>
                 <input type="text" name="description" id="id_description" 
                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                       placeholder="{% if type == 'Renda' %}Ex: Salário, Freelance, etc{% else %}Ex: Mercado, Aluguel, Transporte{% endif %}"  required>
+                       placeholder="{% if type == 'income' %}Ex: Salário, Freelance, etc{% else %}Ex: Mercado, Aluguel, Transporte{% endif %}"  required>
             </div>
 
             <!-- Campo de valor -->
@@ -42,7 +42,7 @@
 
 
             <!-- Campo de frequência (somente para rendas) -->
-            {% if type == 'Renda' %}
+            {% if type == 'income' %}
             <div>
                 <label for="id_frequency" class="block text-gray-700 font-semibold mb-1">Frequência</label>
                 <select name="frequency" id="id_frequency"

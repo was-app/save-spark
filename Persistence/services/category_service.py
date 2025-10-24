@@ -9,5 +9,15 @@ class CategoryService:
 
     def get_category_by_name(self, name):
         return self.repo.get(name=name)
-    # def get_category_id(self, category):
-    #     return self.repo.get_category_id(category=category)
+    
+    def get_category_by_id(self, id):
+        return self.repo.get(id=id)
+    
+    def create_category(self, name):
+        pass
+
+    def update_category(self, name):
+        pass
+
+    def delete_category(self, name):
+        pass

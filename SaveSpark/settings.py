@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'Persistence.apps.PersistenceConfig',
     'Home.apps.HomeConfig',
     'Transactions.apps.TransactionsConfig',
+    'Categories.apps.CategoriesConfig',
 ]
 
 MIDDLEWARE = [

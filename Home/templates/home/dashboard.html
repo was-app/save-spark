@@ -12,19 +12,20 @@
     <div class="text-center">
         <h1 class="text-4xl font-bold mb-8">Bem-vindo, {{ user.username }}!</h1>
         <p class="text-xl mb-10">O que você deseja fazer?</p>
-        <div class="space-x-4">
-            <a href="{% url 'add_income' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-lg text-xl">
-                Adicionar Renda
-            </a>
-            <a href="{% url 'add_outgoing' %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-8 rounded-lg text-xl">
-                Adicionar Gasto
-            </a>
-        </div>
-        <div class="mt-10">
-            <a href="{% url 'view_all' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-xl">
-                Visualizar Transações
-            </a>
-        </div>
+            <div class="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+                <a href="{% url 'add_income' %}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 rounded-lg text-xl text-center">
+                    Adicionar Renda
+                </a>
+                <a href="{% url 'add_outgoing' %}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-4 rounded-lg text-xl text-center">
+                    Adicionar Gasto
+                </a>
+                <a href="{% url 'view_all' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 rounded-lg text-xl text-center">
+                    Transações
+                </a>
+                <a href="{% url 'category_list' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 rounded-lg text-xl text-center">
+                    Categorias
+                </a>
+            </div>
         <div class="mt-12">
             <a href="{% url 'logout' %}" class="text-gray-500 hover:text-gray-700">Sair</a>
         </div>

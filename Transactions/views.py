@@ -24,13 +24,13 @@ def add_income(request):
     else:
         form = IncomeTransactionForm()
         
-    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'Renda'})
+    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'income'})
 
 def add_outgoing(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
-    categories = TransactionService().get_category_by_type('Gasto')
+    categories = TransactionService().get_category_by_type('outgoing')
 
     if request.method == 'POST':
         form = OutgoingTransactionForm(request.POST)
@@ -43,7 +43,7 @@ def add_outgoing(request):
     else:
         form = OutgoingTransactionForm()
 
-    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'Gasto', 'categories': categories})
+    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'outgoing', 'categories': categories})
 
 def view_all(request):
     if not request.user.is_authenticated:
@@ -53,26 +53,35 @@ def view_all(request):
     service = TransactionService()
 
     if request.method == 'POST':
-
+        action = request.POST.get('action')
         category_service = CategoryService()
         transaction_type = request.POST.get('transaction_type')
         transaction_id = request.POST.get('transaction_id')
-        new_category_name = request.POST.get('category')
-        category = category_service.get_category_by_name(new_category_name)
 
         if transaction_type == 'income':
             transaction = service.get_income_by_id(transaction_id)
         else:
             transaction = service.get_outgoing_by_id(transaction_id)
 
-        if transaction and category:
-            transaction.category = category
+        if action == 'delete':
             if transaction_type == 'income':
-                service.update_income(transaction, **{'category': category})
+                service.delete_income(transaction)
             else:
-                service.update_outgoing(transaction, **{'category': category})
+                service.delete_outgoing(transaction)
+    
+            return redirect('view_all')
 
-        return redirect('view_all')
+        elif action == 'update':
+            new_category_id = request.POST.get('category')
+            category = category_service.get_category_by_id(new_category_id)
+            if transaction and category:
+                transaction.category = category
+                if transaction_type == 'income':
+                    service.update_income(transaction, **{'category': category})
+                else:
+                    service.update_outgoing(transaction, **{'category': category})
+
+            return redirect('view_all')
 
     income_transactions = service.get_incomes_from_user(user)
     outgoing_transactions = service.get_outgoings_from_user(user)
@@ -80,20 +89,19 @@ def view_all(request):
 
     grouped = {}
     for t in income_transactions:
-        cat_name = t.category if t.category else "Sem Categoria"
+        cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "income"
         grouped.setdefault(cat_name, []).append(t)
 
     for t in outgoing_transactions:
-        cat_name = t.category if t.category else "Sem Categoria"
+        cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "outgoing"
         grouped.setdefault(cat_name, []).append(t)
 
-    categories = [cat.name for cat in Category.objects.all()]
-
     context = {
         'grouped_transactions': grouped,
-        'categories': categories,
+        'income_categories': Category.objects.filter(type='income'),
+        'outgoing_categories': Category.objects.filter(type='Gasto'),
     }
 
     return render(request, 'transactions/view_all.html', context)

@@ -48,11 +48,19 @@
                             <input type="hidden" name="transaction_type" value="{{ t.type }}">
 
                             <select name="category" class="border rounded-md px-2 py-1">
-                                {% for category_option in all_categories %}
-                                    <option value="{{ category_option.id }}" {% if t.category.id == category_option.id %}selected{% endif %}>
-                                        {{ category_option.name }}
-                                    </option>
-                                {% endfor %}
+                                {% if t.type == 'income' %}
+                                    {% for category_option in income_categories %}
+                                        <option value="{{ category_option.id }}" {% if t.category.id == category_option.id %}selected{% endif %}>
+                                            {{ category_option.name }}
+                                        </option>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for category_option in outgoing_categories %}
+                                        <option value="{{ category_option.id }}" {% if t.category.id == category_option.id %}selected{% endif %}>
+                                            {{ category_option.name }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
                             </select>
 
                             <button type="submit" name="action" value="update"
@@ -71,7 +79,7 @@
                     </div>
                 </td>
 
-                <!-- Modal de Exclusãp -->
+                <!-- Modal de Exclusão -->
                 <dialog id="confirm-modal-{{ t.id }}" class="rounded-lg p-6 shadow-lg w-80">
                     <h3 class="text-lg font-semibold mb-4">Confirmar exclusão</h3>
                     <p class="mb-4 text-gray-600">Tem certeza que deseja excluir esta transação?</p>
@@ -84,6 +92,7 @@
                         <form method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="transaction_id" value="{{ t.id }}">
+                            <input type="hidden" name="transaction_type" value="{{ t.type }}">
                             <button type="submit" name="action" value="delete"
                                     class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded">
                                 Excluir

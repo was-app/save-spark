@@ -40,7 +40,7 @@ class IncomeTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     description = models.CharField(max_length=255, blank=True, null=True)
     frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
@@ -56,7 +56,7 @@ class OutgoingTransaction(models.Model):
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     value = models.FloatField()
     carried_out_at = models.DateTimeField(auto_now_add=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
     description = models.CharField(max_length=255, blank=True, null=True)
     frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
@@ -64,7 +64,7 @@ class OutgoingTransaction(models.Model):
         return f"{self.client.username} - {self.value}"
 
     class Meta:
-        db_table = 'outcome_transactions'
+        db_table = 'outgoing_transactions'
         ordering = ['-carried_out_at']
 
 class BaseRepository:

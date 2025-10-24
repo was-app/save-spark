@@ -7,17 +7,17 @@ from .models import Category
 def create_default_categories(sender, **kwargs):
     if sender.label == "Persistence":
         categories = [
-            {'name': 'Salário', 'type': 'Renda'},
-            {'name': 'Investimentos', 'type': 'Renda'},
-            {'name': 'Freelance', 'type': 'Renda'},
-            {'name': 'Outros', 'type': 'Renda'},
-            {'name': 'Alimentação', 'type': 'Gasto'},
-            {'name': 'Moradia', 'type': 'Gasto'},
-            {'name': 'Transporte', 'type': 'Gasto'},
-            {'name': 'Lazer', 'type': 'Gasto'},
-            {'name': 'Saúde', 'type': 'Gasto'},
-            {'name': 'Vaidade', 'type': 'Gasto'},
-            {'name': 'Outros', 'type': 'Gasto'},
+            {'name': 'Salário', 'type': 'income'},
+            {'name': 'Investimentos', 'type': 'income'},
+            {'name': 'Freelance', 'type': 'income'},
+            {'name': 'Outros', 'type': 'income'},
+            {'name': 'Alimentação', 'type': 'outgoing'},
+            {'name': 'Moradia', 'type': 'outgoing'},
+            {'name': 'Transporte', 'type': 'outgoing'},
+            {'name': 'Lazer', 'type': 'outgoing'},
+            {'name': 'Saúde', 'type': 'outgoing'},
+            {'name': 'Vaidade', 'type': 'outgoing'},
+            {'name': 'Outros', 'type': 'outgoing'},
         ]
         for cat in categories:
             Category.objects.get_or_create(name=cat['name'], type=cat['type'])
