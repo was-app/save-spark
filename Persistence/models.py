@@ -45,7 +45,7 @@ class IncomeTransaction(models.Model):
     frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.client.username} - {self.value}"
+        return f"{self.id} - {self.description} - {self.value}"
 
     class Meta:
         db_table = 'income_transactions'
@@ -61,7 +61,7 @@ class OutgoingTransaction(models.Model):
     frequency = models.CharField(max_length=50, choices=FREQUENCY_CHOICES, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.client.username} - {self.value}"
+        return f"{self.id} - {self.description} - {self.value}"
 
     class Meta:
         db_table = 'outgoing_transactions'

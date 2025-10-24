@@ -71,7 +71,7 @@
 
                         <!-- Botão de exclusão -->
                             <button type="button"
-                                    onclick="document.getElementById('confirm-modal-{{ t.id }}').showModal()"
+                                    onclick="document.getElementById('confirm-modal-{{ t.type }}-{{ t.id }}').showModal()"
                                     class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
                                 Excluir
                             </button>
@@ -80,7 +80,7 @@
                 </td>
 
                 <!-- Modal de Exclusão -->
-                <dialog id="confirm-modal-{{ t.id }}" class="rounded-lg p-6 shadow-lg w-80">
+                <dialog id="confirm-modal-{{ t.type }}-{{ t.id }}" class="rounded-lg p-6 shadow-lg w-80">
                     <h3 class="text-lg font-semibold mb-4">Confirmar exclusão</h3>
                     <p class="mb-4 text-gray-600">Tem certeza que deseja excluir esta transação?</p>
 

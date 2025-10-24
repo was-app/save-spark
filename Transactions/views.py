@@ -6,6 +6,7 @@ from Persistence.models import Category
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from Persistence.services.category_service import CategoryService
+import logging
 
 def add_income(request):
     if not request.user.is_authenticated:
@@ -24,7 +25,7 @@ def add_income(request):
     else:
         form = IncomeTransactionForm()
         
-    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'income'})
+    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'income', 'type_name': 'Renda'})
 
 def add_outgoing(request):
     if not request.user.is_authenticated:
@@ -38,12 +39,12 @@ def add_outgoing(request):
             # outgoing = form.save(commit=False)
             outgoing = form.cleaned_data
             tmp = TransactionService()
-            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'])
+            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'], frequency=outgoing['frequency'])
             return redirect('home:dashboard')
     else:
         form = OutgoingTransactionForm()
 
-    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'outgoing', 'categories': categories})
+    return render(request, 'transactions/add_transaction.html', {'form': form, 'type': 'outgoing', 'type_name': 'Gasto'})
 
 def view_all(request):
     if not request.user.is_authenticated:
@@ -101,7 +102,7 @@ def view_all(request):
     context = {
         'grouped_transactions': grouped,
         'income_categories': Category.objects.filter(type='income'),
-        'outgoing_categories': Category.objects.filter(type='Gasto'),
+        'outgoing_categories': Category.objects.filter(type='outgoing'),
     }
 
     return render(request, 'transactions/view_all.html', context)

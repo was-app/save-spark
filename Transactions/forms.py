@@ -50,7 +50,6 @@ class IncomeTransactionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Populate choices dynamically at runtime
         self.fields['category'].choices = [
             (str(category.id), category.name)
             for category in Category.objects.filter(type='income').order_by('name')
@@ -84,14 +83,21 @@ class OutgoingTransactionForm(forms.ModelForm):
         })
     )
 
+    frequency = forms.ChoiceField(
+        label="Frequência",
+        choices=FREQUENCY_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
+        })
+    )
+
     class Meta:
         model = OutgoingTransaction
-        fields = ['description', 'value', 'category']
+        fields = ['description', 'value', 'category', 'frequency']
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     # Populate choices dynamically at runtime
-    #     self.fields['category'].choices = [
-    #         (str(category.id), category.name)
-    #         for category in Category.objects.filter(type='Gasto').order_by('name')
-    #     ]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].choices = [
+            (str(category.id), category.name)
+            for category in Category.objects.filter(type='outgoing').order_by('name')
+        ]

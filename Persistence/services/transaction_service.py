@@ -49,7 +49,6 @@ class TransactionService:
         return self.outgoing_repo.get_outgoings_by_date(date=date)
     
     def get_outgoings_by_category(self, category):
-        # id = 
         return self.outgoing_repo.get_outgoings_by_category(category=category)
     
     def get_all_categories(self):
