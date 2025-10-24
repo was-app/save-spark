@@ -92,7 +92,7 @@ class OutgoingTransactionForm(forms.ModelForm):
     )
 
     class Meta:
-        model = OutgoingTransaction
+        model = OutgoingTransaction # tem que chamar o model de transactions
         fields = ['description', 'value', 'category', 'frequency']
 
     def __init__(self, *args, **kwargs):

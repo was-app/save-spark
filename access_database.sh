@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-DB_USER="reis"
+DB_USER="izzy"
 DB_NAME="postgres"
 
 # Load .env if present (to read DATABASE_USERNAME / DATABASE_NAME)
