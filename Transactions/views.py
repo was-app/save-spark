@@ -92,12 +92,16 @@ def view_all(request):
     for t in income_transactions:
         cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "income"
-        grouped.setdefault(cat_name, []).append(t)
+        grouped.setdefault(cat_name, {'transactions': [], 'total': 0})
+        grouped[cat_name]['transactions'].append(t)
+        grouped[cat_name]['total'] += t.value
 
     for t in outgoing_transactions:
         cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "outgoing"
-        grouped.setdefault(cat_name, []).append(t)
+        grouped.setdefault(cat_name, {'transactions': [], 'total': 0})
+        grouped[cat_name]['transactions'].append(t)
+        grouped[cat_name]['total'] += t.value
 
     context = {
         'grouped_transactions': grouped,
