@@ -93,6 +93,7 @@ def view_all(request):
         cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "income"
         grouped.setdefault(cat_name, []).append(t)
+        
 
     for t in outgoing_transactions:
         cat_name = t.category.name if t.category else "Sem Categoria"
