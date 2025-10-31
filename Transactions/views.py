@@ -1,4 +1,3 @@
-# transactions/views.py
 from .forms import IncomeTransactionForm, OutgoingTransactionForm
 from .models import FinancialTransactionProcessor
 from Persistence.services.transaction_service import TransactionService
@@ -6,7 +5,6 @@ from Persistence.models import Category
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from Persistence.services.category_service import CategoryService
-import logging
 
 def add_income(request):
     if not request.user.is_authenticated:
@@ -17,7 +15,7 @@ def add_income(request):
         if form.is_valid():
             # income = form.save(commit=False)
             income = form.cleaned_data
-            tmp = FinancialTransactionProcessor()
+            tmp = TransactionService()
             tmp.register_income(client=request.user, value=income['value'], category=income['category'], description=income['description'], frequency=income['frequency'])
             return redirect('home:dashboard')
         else:
@@ -38,8 +36,8 @@ def add_outgoing(request):
         if form.is_valid():
             # outgoing = form.save(commit=False)
             outgoing = form.cleaned_data
-            tmp = FinancialTransactionProcessor()
-            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'])
+            tmp = TransactionService()
+            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'], frequency=outgoing['frequency'])
             return redirect('home:dashboard')
     else:
         form = OutgoingTransactionForm()
