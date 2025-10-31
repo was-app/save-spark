@@ -7,8 +7,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from Persistence.services.category_service import CategoryService
 import logging
-from django.contrib import messages
-
 
 def add_income(request):
     if not request.user.is_authenticated:
@@ -19,8 +17,8 @@ def add_income(request):
         if form.is_valid():
             # income = form.save(commit=False)
             income = form.cleaned_data
-            tmp = FinancialTransactionProcessor()
-            tmp.register_income(user=request.user, value=income['value'], category=income['category'], description=income['description'], frequency=income['frequency'])
+            tmp = TransactionService()
+            tmp.register_income(client=request.user, value=income['value'], category=income['category'], description=income['description'], frequency=income['frequency'])
             return redirect('home:dashboard')
         else:
             return HttpResponse(form.errors)
@@ -33,16 +31,16 @@ def add_outgoing(request):
     if not request.user.is_authenticated:
         return redirect('login')
 
+    categories = TransactionService().get_category_by_type('outgoing')
+
     if request.method == 'POST':
         form = OutgoingTransactionForm(request.POST)
         if form.is_valid():
             # outgoing = form.save(commit=False)
             outgoing = form.cleaned_data
-            tmp = FinancialTransactionProcessor()
-            tmp.register_outgoing(user=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'])
+            tmp = TransactionService()
+            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'], frequency=outgoing['frequency'])
             return redirect('home:dashboard')
-        else:
-            return HttpResponse(form.errors)
     else:
         form = OutgoingTransactionForm()
 
@@ -53,32 +51,41 @@ def view_all(request):
         return redirect('login')
     
     user = request.user
-    service = FinancialTransactionProcessor()
+    service = TransactionService()
 
     if request.method == 'POST':
         action = request.POST.get('action')
-        category_service = FinancialTransactionProcessor()
+        category_service = CategoryService()
         transaction_type = request.POST.get('transaction_type')
         transaction_id = request.POST.get('transaction_id')
 
+        if transaction_type == 'income':
+            transaction = service.get_income_by_id(transaction_id)
+        else:
+            transaction = service.get_outgoing_by_id(transaction_id)
+
         if action == 'delete':
-            service.delete_transaction(request.user, transaction_type, transaction_id)
-            messages.success(request, f'Transação deletada com sucesso!')
-            
+            if transaction_type == 'income':
+                service.delete_income(transaction)
+            else:
+                service.delete_outgoing(transaction)
+    
+            return redirect('view_all')
 
         elif action == 'update':
             new_category_id = request.POST.get('category')
-            category = category_service.get_categories_by_id(new_category_id)
-            if category:
-                try:
-                    service.update_transaction_category(transaction_type, transaction_id, category)
-                    messages.success(request, f'Transação atualizada com sucesso!')
-                except category.DoesNotExist:
-                    messages.error(request, "Não foi possível atualizar a Transação")
+            category = category_service.get_category_by_id(new_category_id)
+            if transaction and category:
+                transaction.category = category
+                if transaction_type == 'income':
+                    service.update_income(transaction, **{'category': category})
+                else:
+                    service.update_outgoing(transaction, **{'category': category})
 
-        return redirect('view_all')
+            return redirect('view_all')
 
-    income_transactions, outgoing_transactions = service.get_transactions(user)
+    income_transactions = service.get_incomes_from_user(user)
+    outgoing_transactions = service.get_outgoings_from_user(user)
     
 
     grouped = {}
