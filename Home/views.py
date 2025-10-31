@@ -10,3 +10,8 @@ def dashboard(request):
 
 def index(request):
     return redirect('home:dashboard') 
+
+def connect_belvo(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'home/connect_belvo.html')
