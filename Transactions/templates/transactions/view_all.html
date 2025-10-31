@@ -55,7 +55,6 @@
             Total: R$ {{ data.total }}
         </span>
     </div>
-
     <table class="min-w-full">
         <thead class="bg-gray-50">
             <tr>
@@ -81,7 +80,6 @@
                 <td class="px-6 py-4 whitespace-nowrap {% if t.type == 'income' %}text-green-600{% else %}text-red-600{% endif %}">
                     R$ {{ t.value }}
                 </td>
-
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center gap-2">
                         <!-- Formulário de atualização -->
@@ -89,7 +87,6 @@
                             {% csrf_token %}
                             <input type="hidden" name="transaction_id" value="{{ t.id }}">
                             <input type="hidden" name="transaction_type" value="{{ t.type }}">
-
                             <select name="category" class="border rounded-md px-2 py-1">
                                 {% if t.type == 'income' %}
                                     {% for category_option in income_categories %}
@@ -105,13 +102,11 @@
                                     {% endfor %}
                                 {% endif %}
                             </select>
-
                             <button type="submit" name="action" value="update"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
                                 Atualizar
                             </button>
                         
-
                         <!-- Botão de exclusão -->
                             <button type="button"
                                     onclick="document.getElementById('confirm-modal-{{ t.type }}-{{ t.id }}').showModal()"
@@ -121,17 +116,14 @@
                         </form>
                     </div>
                 </td>
-
                 <!-- Modal de Exclusão -->
                 <dialog id="confirm-modal-{{ t.type }}-{{ t.id }}" class="rounded-lg p-6 shadow-lg w-80">
                     <h3 class="text-lg font-semibold mb-4">Confirmar exclusão</h3>
                     <p class="mb-4 text-gray-600">Tem certeza que deseja excluir esta transação?</p>
-
                     <div class="flex justify-end gap-3">
                         <form method="dialog">
                             <button class="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded">Cancelar</button>
                         </form>
-
                         <form method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="transaction_id" value="{{ t.id }}">
@@ -143,8 +135,6 @@
                         </form>
                     </div>
                 </dialog>
-
-
             </tr>
             {% endfor %}
         </tbody>
@@ -153,8 +143,6 @@
 {% empty %}
 <p class="text-gray-500">Nenhuma transação encontrada.</p>
 {% endfor %}
-
 <a href="{% url 'home:dashboard' %}" class="mt-6 inline-block text-blue-500 hover:underline">Voltar para a Dashboard</a>
-
 </body>
 </html>

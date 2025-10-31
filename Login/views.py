@@ -41,7 +41,8 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.save()
-            ClientService.create_client(client=user)
+            # client = Client(client=user)g
+            ClientService().create_client(user)
             return redirect('login')
         else:
             messages.error(request, form.errors)

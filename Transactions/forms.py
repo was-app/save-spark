@@ -84,8 +84,8 @@ class OutgoingTransactionForm(forms.ModelForm):
     )
 
     class Meta:
-        model = OutgoingTransaction 
-        fields = ['description', 'value', 'category']
+        model = OutgoingTransaction # tem que chamar o model de transactions
+        fields = ['description', 'value', 'category', 'frequency']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

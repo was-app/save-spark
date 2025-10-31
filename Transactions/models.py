@@ -2,13 +2,12 @@ from django.db import transaction
 from Persistence.services.client_service import ClientService
 from Persistence.models import Client
 from Persistence.services.transaction_service import TransactionService
-from Persistence.services.category_service import CategoryService
 
 class FinancialTransactionProcessor:
+   
     def __init__(self):
         self.client_service = ClientService()
         self.transaction_service = TransactionService()
-        self.category_service = CategoryService()
 
     def register_income(self, client, value, category, description=None, frequency=None):
         
@@ -64,26 +63,39 @@ class FinancialTransactionProcessor:
         return transaction
     
     @transaction.atomic
-    def delete_transaction(self, user, transaction_type, transaction_id):
-        if transaction_type == 'income':
-            transaction = self.transaction_service.get_income_by_id(transaction_id)
-        else:
-            transaction = self.transaction_service.get_outgoing_by_id(transaction_id)
+    def process_transaction(self, user, income=0, expense=0,
+                            income_category=None, expense_category=None,
+                            action="register"):
+
 
         try:
             client = self.client_service.get_client(client=user)
-        except Exception:
-            raise ValueError("Client record not found for user")
+        except:
+            client = self.client_service.create_client(user)
 
-        value = float(transaction.value or 0)
+        result = {}
 
-        if transaction_type == 'income':
-            self.transaction_service.delete_income(transaction)
-            new_balance = client.current_balance - value
+        if action == "register":
+            if expense > income:
+                expense = income
+
+            if income > 0 and income_category:
+                self.transaction_service.register_income(user, income, income_category)
+
+            if expense > 0 and expense_category:
+                self.transaction_service.register_outgoing(user, expense, expense_category)
+
+            new_balance = client.current_balance + income - expense
+            self.client_service.update_balance(client, new_balance)
+
+            result["status"] = "registered"
+            result["current_balance"] = new_balance
+
+        elif action == "simulate":
+            result["balance"] = income - expense
+            result["description"] = "Simulation"
+
         else:
-            self.transaction_service.delete_outgoing(transaction)
-            new_balance = client.current_balance + value
+            raise ValueError("Invalid action")
 
-        self.client_service.update_balance(client, new_balance)
-
-        return transaction
+        return result

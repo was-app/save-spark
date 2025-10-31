@@ -17,7 +17,7 @@ def category_list(request):
 
         if action == 'create' and name and type_:
             Category.objects.create(name=name, type=type_)
-            messages.success(request, f'Categoria criada com sucesso.')
+            messages.success(request, f'Categoria "{name}" criada com sucesso.')
 
         elif action == 'update' and category_id and name and type_:
             try:
@@ -25,7 +25,7 @@ def category_list(request):
                 category.name = name
                 category.type = type_
                 category.save()
-                messages.success(request, f'Categoria atualizada com sucesso.')
+                messages.success(request, f'Categoria "{name}" atualizada com sucesso.')
             except Category.DoesNotExist:
                 messages.error(request, "Categoria não encontrada.")
 
@@ -38,7 +38,7 @@ def category_list(request):
                     messages.error(request, "Não é possível deletar uma categoria com transações associadas.")
                 else:
                     category.delete()
-                    messages.success(request, f'Categoria excluída com sucesso.')
+                    messages.success(request, f'Categoria "{category.name}" excluída com sucesso.')
             except Category.DoesNotExist:
                 messages.error(request, "Categoria não encontrada.")
 
