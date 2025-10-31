@@ -1,0 +1,42 @@
+{% comment %} goals/templates/goals/view_goals.html {% endcomment %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Metas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+  <div class="max-w-3xl w-full mt-10 p-6 bg-white rounded-xl shadow-md">
+    <h1 class="text-3xl font-bold text-center mb-6">🎯 Minhas Metas</h1>
+
+    {% if goals %}
+      <div class="grid gap-4">
+        {% for goal in goals %}
+          <div class="bg-blue-100 border-l-4 border-blue-500 p-4 rounded-lg shadow">
+            <h2 class="text-xl font-semibold text-blue-800">{{ goal.name }}</h2>
+            <p class="text-gray-700 mt-1">{{ goal.description }}</p>
+            <p class="text-gray-600 mt-2">
+              <strong>Meta:</strong> R$ {{ goal.target_amount }} <br>
+              <strong>Prazo:</strong> {{ goal.target_date }}
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-center text-gray-600 text-lg mt-4">
+        Você ainda não criou nenhuma meta. 
+        <a href="{% url 'goals:add_goals' %}" class="text-blue-500 hover:underline font-semibold">
+          Criar nova meta
+        </a>
+      </p>
+    {% endif %}
+  </div>
+
+  <a href="{% url 'home:dashboard' %}" 
+     class="mt-6 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
+     ⬅ Voltar ao Dashboard
+  </a>
+</body>
+</html>

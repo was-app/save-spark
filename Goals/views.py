@@ -22,6 +22,16 @@ def add_goals(request):
         
     return render(request, 'goals/add_goals.html', {'form': form})
 
+def view_goals(request):
+    goal_service = GoalService()
+    user = request.user
+    goals = goal_service.get_goals_by_user(user)
+
+    context = {
+        'goals': goals
+    }
+    return render(request, 'goals/view_goals.html', context)
+
 # def goals_view(request):
 #     goal_service = GoalService()
 #     user = request.user

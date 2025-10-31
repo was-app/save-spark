@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'Home.apps.HomeConfig',
     'Transactions.apps.TransactionsConfig',
     'Categories.apps.CategoriesConfig',
+    'Goals.apps.GoalsConfig',
 ]
 
 MIDDLEWARE = [
