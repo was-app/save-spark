@@ -67,6 +67,22 @@ class OutgoingTransaction(models.Model):
         db_table = 'outgoing_transactions'
         ordering = ['-carried_out_at']
 
+class Goal(models.Model):
+    id = models.AutoField(primary_key=True)
+    client = models.ForeignKey(User, on_delete=models.CASCADE)
+    target_amount = models.FloatField()
+    current_amount = models.FloatField(default=0)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.id} - {self.description} - {self.current_amount}/{self.target_amount}"
+
+    class Meta:
+        db_table = 'goals'
+        ordering = ['-created_at']
+
 class BaseRepository:
     def __init__(self, model: models.Model):
         self.model = model

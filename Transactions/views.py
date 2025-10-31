@@ -93,7 +93,7 @@ def view_all(request):
         cat_name = t.category.name if t.category else "Sem Categoria"
         t.type = "income"
         grouped.setdefault(cat_name, {'transactions': [], 'total': 0})
-        grouped[cat_name]['transactions'].append(t)
+        grouped[cat_name]['transactions'].(t)
         grouped[cat_name]['total'] += t.value
 
     for t in outgoing_transactions:
@@ -105,8 +105,8 @@ def view_all(request):
 
     context = {
         'grouped_transactions': grouped,
-        'income_categories': Category.objects.filter(type='income'),
-        'outgoing_categories': Category.objects.filter(type='outgoing'),
-    }
+        'income_categories': list(Category.objects.filter(type='income').values('id', 'name')),
+        'outgoing_categories': list(Category.objects.filter(type='outgoing').values('id', 'name')),
+        }
 
     return render(request, 'transactions/view_all.html', context)
