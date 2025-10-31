@@ -17,7 +17,7 @@ def add_income(request):
         if form.is_valid():
             # income = form.save(commit=False)
             income = form.cleaned_data
-            tmp = TransactionService()
+            tmp = FinancialTransactionProcessor()
             tmp.register_income(client=request.user, value=income['value'], category=income['category'], description=income['description'], frequency=income['frequency'])
             return redirect('home:dashboard')
         else:
@@ -38,8 +38,8 @@ def add_outgoing(request):
         if form.is_valid():
             # outgoing = form.save(commit=False)
             outgoing = form.cleaned_data
-            tmp = TransactionService()
-            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'], frequency=outgoing['frequency'])
+            tmp = FinancialTransactionProcessor()
+            tmp.register_outgoing(client=request.user, value=outgoing['value'], category=outgoing['category'], description=outgoing['description'])
             return redirect('home:dashboard')
     else:
         form = OutgoingTransactionForm()

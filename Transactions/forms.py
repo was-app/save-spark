@@ -83,14 +83,6 @@ class OutgoingTransactionForm(forms.ModelForm):
         })
     )
 
-    frequency = forms.ChoiceField(
-        label="Frequência",
-        choices=FREQUENCY_CHOICES,
-        widget=forms.Select(attrs={
-            'class': 'w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white'
-        })
-    )
-
     class Meta:
         model = OutgoingTransaction # tem que chamar o model de transactions
         fields = ['description', 'value', 'category', 'frequency']
