@@ -1,5 +1,6 @@
 from django.db import transaction
 from Persistence.services.client_service import ClientService
+from Persistence.models import Client
 from Persistence.services.transaction_service import TransactionService
 from Persistence.services.category_service import CategoryService
 
@@ -9,34 +10,35 @@ class FinancialTransactionProcessor:
         self.transaction_service = TransactionService()
         self.category_service = CategoryService()
 
-    def register_income(self, user, value, category, description=None, frequency=None):
+    def register_income(self, client, value, category, description=None, frequency=None):
         
-        client = self.client_service.get_client(client=user)
-
+        client_obj = self.client_service.get_client(client=client)
+        
         income = self.transaction_service.register_income(
-            client=user,
+            client=client,
             value=value,
             category=category,
             description=description,
             frequency=frequency
         )
 
-        new_balance = client.current_balance + value
-        self.client_service.update_balance(client, new_balance)
+        new_balance = client_obj.current_balance + float(value)
+        self.client_service.update_balance(client_obj, new_balance)
         return income
 
-    def register_outgoing(self, user, value, category, description=None):
+    def register_outgoing(self, client, value, category, description=None):
 
-        client = self.client_service.get_client(client=user)
+        client_obj = self.client_service.get_client(client=client)
+
         outgoing = self.transaction_service.register_outgoing(
-            client=user,
+            client=client,
             value=value,
             category=category,
             description=description
         )
 
-        new_balance = client.current_balance - value
-        self.client_service.update_balance(client, new_balance)
+        new_balance = client_obj.current_balance - float(value)
+        self.client_service.update_balance(client_obj, new_balance)
         return outgoing
 
     def get_transactions(self, user):

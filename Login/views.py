@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .models import Client
+from Persistence.services.client_service import ClientService
+
 
 # Create your views here.
 from .forms import *
@@ -39,7 +41,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.save()
-            client = Client(client=user)
+            ClientService.create_client(client=user)
             return redirect('login')
         else:
             messages.error(request, form.errors)
